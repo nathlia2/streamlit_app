@@ -134,9 +134,9 @@ ax4.grid(axis='x', linestyle='--', alpha=0.7)
 
 st.pyplot(fig4)
 
-area_zonificacion_renombrada = area_zonificacion[['ZONIFI_ANP', 'AREA_DEFO_KM2']].rename(columns={
+area_zonificacion_renombrada = area_zonificacion[['ZONIFI_ANP', 'AREA_DEFO']].rename(columns={
     'ZONIFI_ANP': 'Zonificación ANP',
-    'AREA_DEFO_KM2': 'Área deforestada (km²)'
+    'AREA_DEFO': 'Área deforestada (km²)'
 })
 
 # Mostrar tabla 
