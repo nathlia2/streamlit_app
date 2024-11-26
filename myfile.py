@@ -95,7 +95,6 @@ elif seleccion_anio == 2023:
 
 st.write("Causa de la deforestación")
 
-# Ordenar datos 
 area_causa = data.groupby('DEFO_CAUSA')['AREA_DEFO'].sum().reset_index()
 area_causa = area_causa.sort_values('AREA_DEFO', ascending=False)  # Ordenar por área
 
@@ -111,7 +110,6 @@ ax3.axis('equal')
 # Leyenda
 ax3.legend(area_causa['DEFO_CAUSA'], title="Causas de la deforestación", bbox_to_anchor=(1.05, 1), loc='upper left')
 
-# Mostrar gráfico
 st.pyplot(fig3)
 
 # Tabla DEFO_CAUSA
@@ -122,13 +120,11 @@ st.dataframe(area_causa)
 # Gráfico de barras horizontales para zonificación
 st.write("Distribución de la deforestación por zonificación en el Área Natural Protegida (ANP)")
 
-# Agrupar datos por zonificación
 area_zonificacion = data.groupby("ZONIFI_ANP")['AREA_DEFO'].sum().reset_index()
 
-# Ordenar de mayor a menor
 area_zonificacion = area_zonificacion.sort_values('AREA_DEFO', ascending=True)
 
-# Crear gráfico
+#  gráfico
 fig4, ax4 = plt.subplots(figsize=(8, 6))
 ax4.barh(area_zonificacion['ZONIFI_ANP'], area_zonificacion['AREA_DEFO'], color='teal')
 ax4.set_title('Área deforestada por zonificación', fontsize=16)
@@ -136,38 +132,13 @@ ax4.set_xlabel('Área deforestada (km²)', fontsize=12)
 ax4.set_ylabel('Zonificación ANP', fontsize=12)
 ax4.grid(axis='x', linestyle='--', alpha=0.7)
 
-# Mostrar gráfico
 st.pyplot(fig4)
 
-# Gráfico de barras horizontales para zonificación
-st.write("Distribución de la deforestación por zonificación en el Área Natural Protegida (ANP)")
-
-# Agrupar datos por zonificación
-area_zonificacion = data.groupby("ZONIFI_ANP")['AREA_DEFO'].sum().reset_index()
-
-# Convertir área deforestada de hectáreas (ha) a kilómetros cuadrados (km²)
-area_zonificacion['AREA_DEFO_KM2'] = area_zonificacion['AREA_DEFO'] / 100
-
-# Ordenar de mayor a menor
-area_zonificacion = area_zonificacion.sort_values('AREA_DEFO_KM2', ascending=True)
-
-# Crear gráfico
-fig4, ax4 = plt.subplots(figsize=(8, 6))
-ax4.barh(area_zonificacion['ZONIFI_ANP'], area_zonificacion['AREA_DEFO_KM2'], color='teal')
-ax4.set_title('Área deforestada por zonificación', fontsize=16)
-ax4.set_xlabel('Área deforestada (km²)', fontsize=12)
-ax4.set_ylabel('Zonificación ANP', fontsize=12)
-ax4.grid(axis='x', linestyle='--', alpha=0.7)
-
-# Mostrar gráfico
-st.pyplot(fig4)
-
-# Renombrar columnas para la tabla
 area_zonificacion_renombrada = area_zonificacion[['ZONIFI_ANP', 'AREA_DEFO_KM2']].rename(columns={
     'ZONIFI_ANP': 'Zonificación ANP',
     'AREA_DEFO_KM2': 'Área deforestada (km²)'
 })
 
-# Mostrar tabla con datos
+# Mostrar tabla 
 st.write("Datos de área deforestada por zonificación:")
 st.dataframe(area_zonificacion_renombrada)
