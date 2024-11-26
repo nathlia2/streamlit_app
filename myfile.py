@@ -89,6 +89,35 @@ elif seleccion_anio == 2023:
     datos_filtrados_2023 = datos_filtrados_2023[['MES_IMAG', 'ANIO_REPORTE', 'AREA_DEFO']]
     st.write("Datos filtrados para el año 2023:")
     st.dataframe(datos_filtrados_2023)
+    
+
+# Gráfico de pastel para causa de deforestación
+
+st.write("Causa de la deforestación")
+
+# Ordenar datos 
+area_causa = data.groupby('DEFO_CAUSA')['AREA_DEFO'].sum().reset_index()
+area_causa = area_causa.sort_values('AREA_DEFO', ascending=False)  # Ordenar por área
+
+# Colores 
+colores = plt.cm.Paired(range(len(area_causa)))
+
+fig3, ax3 = plt.subplots()
+
+# Gráfico de pastel
+ax3.pie(area_causa['AREA_DEFO'], labels=area_causa['DEFO_CAUSA'], autopct='%1.1f%%', startangle=90, colors=colores, wedgeprops={'edgecolor': 'black'})
+ax3.axis('equal')  
+
+# Leyenda
+ax3.legend(area_causa['DEFO_CAUSA'], title="Causas de la deforestación", bbox_to_anchor=(1.05, 1), loc='upper left')
+
+# Mostrar gráfico
+st.pyplot(fig3)
+
+# Tabla DEFO_CAUSA
+st.write("Datos de causa de deforestación y área deforestada:")
+st.dataframe(area_causa)
+
 
 # Gráfico de barras horizontales para zonificación
 st.write("Distribución de la deforestación por zonificación en el Área Natural Protegida (ANP)")
