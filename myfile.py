@@ -27,69 +27,67 @@ st.dataframe(data)
 
 # Función para filtrar y procesar los datos por año
 def procesar_datos_por_anio(data, anio):
+    meses = {
+        1: 'Enero', 2: 'Febrero', 3: 'Marzo', 4: 'Abril', 5: 'Mayo', 6: 'Junio',
+        7: 'Julio', 8: 'Agosto', 9: 'Septiembre', 10: 'Octubre', 11: 'Noviembre', 12: 'Diciembre'
+    }
     datos_anio = data[data['ANIO_REPORTE'] == anio]
     area_por_mes = datos_anio.groupby('MES_IMAG')['AREA_DEFO'].sum().reset_index()
-    area_por_mes = area_por_mes.sort_values(by='MES_IMAG')  
-    return area_por_mes, datos_anio 
+    area_por_mes = area_por_mes.sort_values(by='MES_IMAG')
+    area_por_mes['MES_NOMBRE'] = area_por_mes['MES_IMAG'].map(meses)
+    return area_por_mes, datos_anio
 
+# Función para mostrar gráficos y tablas
+def graficos_y_tabla1(data_anio, datos_filtrados, anio, color):
+    # Gráfico
+    st.write(f"Gráfico del área deforestada por mes en {anio}:")
+    fig, ax = plt.subplots()
+    ax.plot(data_anio['MES_NOMBRE'], data_anio['AREA_DEFO'], marker='o', linestyle='-', color=color)
+    ax.set_title(f'Área deforestada por mes en {anio}')
+    ax.set_xlabel('Mes')
+    ax.set_ylabel('Área Deforestada (ha)')
+    ax.grid(True)
+    plt.xticks(rotation=45)
+    st.pyplot(fig)
+
+    # Tabla
+    st.write(f"Datos filtrados para el año {anio}:")
+    st.dataframe(datos_filtrados[['MES_IMAG', 'ANIO_REPORTE', 'AREA_DEFO']])
+    
 # Filtrar y procesar datos para 2022 y 2023
+data_2021, datos_filtrados_2021 = procesar_datos_por_anio(data, 2021)
 data_2022, datos_filtrados_2022 = procesar_datos_por_anio(data, 2022)
 data_2023, datos_filtrados_2023 = procesar_datos_por_anio(data, 2023)
 
-# Lista de número de mes a nombres 
-meses = {
-    1: 'Enero', 2: 'Febrero', 3: 'Marzo', 4: 'Abril', 5: 'Mayo', 6: 'Junio',
-    7: 'Julio', 8: 'Agosto', 9: 'Septiembre', 10: 'Octubre', 11: 'Noviembre', 12: 'Diciembre'
-}
-
 # Combo box (año)
-seleccion_anio = st.selectbox("Selecciona el año para mostrar el gráfico", [2022, 2023])
+seleccion_anio = st.selectbox("Selecciona el año para mostrar el gráfico", [2021, 2022, 2023])
 
-# Función: mostrar gráficos y tablas
-
-if seleccion_anio == 2022:
-    # Reemplazar números de meses por nombres
-    data_2022['MES_NOMBRE'] = data_2022['MES_IMAG'].map(meses)
-
-    # Gráfico de área deforestada en 2022
-    st.write("Gráfico del área deforestada por mes en 2022:")
-    fig1, ax1 = plt.subplots()
-    ax1.plot(data_2022['MES_NOMBRE'], data_2022['AREA_DEFO'], marker='o', linestyle='-', color='green')
-    ax1.set_title('Área deforestada por mes en 2022')
-    ax1.set_xlabel('Mes')
-    ax1.set_ylabel('Área Deforestada (ha)')
-    ax1.grid(True)
-    plt.xticks(rotation=45) 
-    st.pyplot(fig1)
-
-    # Tabla MES_IMAG, ANIO_REPORTE y AREA_DEFO
-    datos_filtrados_2022 = datos_filtrados_2022[['MES_IMAG', 'ANIO_REPORTE', 'AREA_DEFO']]
-    st.write("Datos filtrados para el año 2022:")
-    st.dataframe(datos_filtrados_2022)  
-
+# Mostrar gráficos y tablas según la selección
+if seleccion_anio == 2021:
+    graficos_y_tabla1(data_2021, datos_filtrados_2021, 2021, 'orange')
+elif seleccion_anio == 2022:
+    graficos_y_tabla1(data_2022, datos_filtrados_2022, 2022, 'green')
 elif seleccion_anio == 2023:
+    graficos_y_tabla1(data_2023, datos_filtrados_2023, 2023, 'blue')
 
-    # De número a mes
-    data_2023['MES_NOMBRE'] = data_2023['MES_IMAG'].map(meses)
+# Gráfico comparativo entre años
+st.write("Comparación de área deforestada entre 2021, 2022 y 2023:")
+promedios = pd.DataFrame({
+    "Año": ["2021", "2022", "2023"],
+    "Promedio Mensual (ha)": [
+        data_2021['AREA_DEFO'].mean(),
+        data_2022['AREA_DEFO'].mean(),
+        data_2023['AREA_DEFO'].mean()
+    ]
+})
 
-    # Gráfico de área deforestada en 2023
-    st.write("Gráfico del área deforestada por mes en 2023:")
-    fig2, ax2 = plt.subplots()
-    ax2.plot(data_2023['MES_NOMBRE'], data_2023['AREA_DEFO'], marker='o', linestyle='-', color='blue')
+fig, ax = plt.subplots()
+ax.bar(promedios['Año'], promedios['Promedio Mensual (ha)'], color=['orange', 'green', 'blue'])
+ax.set_title('Promedio mensual de área deforestada (2021-2023)')
+ax.set_xlabel('Año')
+ax.set_ylabel('Área Deforestada (ha)')
+st.pyplot(fig)    
 
-    ax2.set_title('Área deforestada por mes en 2023')
-    ax2.set_xlabel('Mes')
-    ax2.set_ylabel('Área Deforestada (ha)')
-    ax2.grid(True) # Cuadrícula
-
-    plt.xticks(rotation=45)  
-    st.pyplot(fig2)
-
-    # Tabla MES_IMAG, ANIO_REPORTE y AREA_DEFO
-    datos_filtrados_2023 = datos_filtrados_2023[['MES_IMAG', 'ANIO_REPORTE', 'AREA_DEFO']]
-    st.write("Datos filtrados para el año 2023:")
-    st.dataframe(datos_filtrados_2023)
-    
 
 # Gráfico de pastel para causa de deforestación
 
