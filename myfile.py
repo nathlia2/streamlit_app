@@ -12,6 +12,9 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
+# Configuración de la página de Streamlit
+st.set_page_config(page_title="Deforestación en Áreas Naturales Protegidas", page_icon="🌳", initial_sidebar_state="expanded", layout='wide')
+
 st.title('Huellas de la deforestación')
 st.header("Rastreando el impacto de la pérdida forestal en Perú a travez del tiempo")
 st.write('La deforestación en Perú es un fenómeno alarmante que ha capturado la atención de ambientalistas, científicos y gobiernos por igual. Este país, hogar de una de las partes más ricas en biodiversidad del planeta, enfrenta una creciente amenaza debido a la tala indiscriminada de bosques, impulsada por actividades como la minería y la expansión urbana. En este caso, analizaremos un registro de monitoreo de la Deforestación en el ámbito de las Áreas Naturales, para dar conocimiento especificos sobre ello y generar un análisis.')
