@@ -90,27 +90,29 @@ st.pyplot(fig)
 
 
 # Gráfico de pastel para causa de deforestación
-
 st.write("Causa de la deforestación")
 
+# Agrupación de datos por causa
 area_causa = data.groupby('DEFO_CAUSA')['AREA_DEFO'].sum().reset_index()
 area_causa = area_causa.sort_values('AREA_DEFO', ascending=False)  # Ordenar por área
 
-# Colores 
-colores = plt.cm.Paired(range(len(area_causa)))
+# Colores uniformes que combinen con gráficos anteriores
+colores = ['#FFA07A', '#90EE90', '#87CEEB', '#4682B4']  # Tonos similares al resto
 
+# Crear gráfico
 fig3, ax3 = plt.subplots()
 
-# Gráfico de pastel
-ax3.pie(area_causa['AREA_DEFO'], labels=area_causa['DEFO_CAUSA'], autopct='%1.1f%%', startangle=90, colors=colores, wedgeprops={'edgecolor': 'black'})
-ax3.axis('equal')  
+# Gráfico de pastel sin etiquetas amontonadas
+ax3.pie(area_causa['AREA_DEFO'], labels=None, autopct='%1.1f%%', startangle=90, colors=colores, wedgeprops={'edgecolor': 'black'})
+ax3.axis('equal')  # Asegurar que sea un círculo perfecto
 
-# Leyenda
+# Leyenda fuera del gráfico
 ax3.legend(area_causa['DEFO_CAUSA'], title="Causas de la deforestación", bbox_to_anchor=(1.05, 1), loc='upper left')
 
+# Mostrar el gráfico en Streamlit
 st.pyplot(fig3)
 
-# Tabla DEFO_CAUSA
+# Tabla de datos
 st.write("Datos de causa de deforestación y área deforestada:")
 st.dataframe(area_causa)
 
