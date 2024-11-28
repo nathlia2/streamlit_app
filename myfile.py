@@ -105,11 +105,11 @@ colores = ['#FFA07A', '#90EE90', '#87CEEB', '#4682B4']  # Tonos similares al res
 # Crear gráfico
 fig3, ax3 = plt.subplots()
 
-# Gráfico de pastel sin etiquetas amontonadas
+# Gráfico de pastel 
 ax3.pie(area_causa['AREA_DEFO'], labels=None, autopct='%1.1f%%', startangle=90, colors=colores, wedgeprops={'edgecolor': 'black'})
 ax3.axis('equal')  # Asegurar que sea un círculo perfecto
 
-# Leyenda fuera del gráfico
+# Leyenda 
 ax3.legend(area_causa['DEFO_CAUSA'], title="Causas de la deforestación", bbox_to_anchor=(1.05, 1), loc='upper left')
 
 # Mostrar el gráfico en Streamlit
