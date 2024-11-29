@@ -129,13 +129,13 @@ if menu == "Área Deforestada por ANP":
         color_discrete_sequence=px.colors.qualitative.Set3
     )
     
-    # Mostrar gráfico
-    st.plotly_chart(fig)
-    st.markdown("*Gráfica: El gráfico muestra la cantidad de área deforestada en hectáreas (ha) para cada Área Natural Protegida durante el período 2021-2023.*")
-    st.warning(
-        'El gráfico resalta que las áreas naturales protegidas con mayor deforestación deben ser objeto de políticas urgentes para mitigar la pérdida de biodiversidad y el impacto ambiental.',
-        icon="🌱"
-    )
+# Mostrar gráfico
+st.plotly_chart(fig)
+st.markdown("*Gráfica: El gráfico muestra la cantidad de área deforestada en hectáreas (ha) para cada Área Natural Protegida durante el período 2021-2023.*")
+st.warning(
+    'El gráfico resalta que las áreas naturales protegidas con mayor deforestación deben ser objeto de políticas urgentes para mitigar la pérdida de biodiversidad y el impacto ambiental.',
+    icon="🌱"
+)
 
 
 # Sección: Data
