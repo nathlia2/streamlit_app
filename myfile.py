@@ -148,6 +148,7 @@ st.dataframe(area_zonificacion_renombrada)
 
 
 #gráfico 04
+
 def graficos_y_tabla4():
     # Filtrar los datos para el período 2021-2023
     df_filtered = df[(df["ANIO_REPORTE"] >= 2021) & (df["ANIO_REPORTE"] <= 2023)]
@@ -157,7 +158,7 @@ def graficos_y_tabla4():
     sum_area_deforestation.rename(columns={"AREA_DEFO": "Área Deforestada (ha)"}, inplace=True)
     
     # Crear el gráfico de dispersión
-    fig = px.scatter(
+    fig5 = px.scatter(
         sum_area_deforestation, 
         x="ANP", 
         y="Área Deforestada (ha)", 
@@ -171,8 +172,8 @@ def graficos_y_tabla4():
     )
     
     # Actualizar los ejes y diseño del gráfico
-    fig.update_yaxes(title_text="Área Deforestada (ha)")
-    fig.update_layout(
+    fig5.update_yaxes(title_text="Área Deforestada (ha)")
+    fig5.update_layout(
         xaxis=dict(title='Área Natural Protegida', tickangle=-45),
         yaxis=dict(title='Área Deforestada (ha) (2021-2023)'),
         template="plotly_dark",
@@ -180,9 +181,10 @@ def graficos_y_tabla4():
     )
     
     # Mostrar el gráfico y una descripción
-    st.plotly_chart(fig)
+    st.plotly_chart(fig5)
     st.markdown("*Gráfica: El gráfico muestra la cantidad de área deforestada en hectáreas (ha) para cada Área Natural Protegida durante el período 2021-2023.*")
     st.warning(
         'El gráfico resalta que las áreas naturales protegidas con mayor deforestación deben ser objeto de políticas urgentes para mitigar la pérdida de biodiversidad y el impacto ambiental.',
         icon="🌱"
     )
+
