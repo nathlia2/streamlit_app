@@ -145,3 +145,44 @@ area_zonificacion_renombrada = area_zonificacion[['ZONIFI_ANP', 'AREA_DEFO']].re
 # Mostrar tabla 
 st.write("Datos de área deforestada por zonificación:")
 st.dataframe(area_zonificacion_renombrada)
+
+
+#gráfico 04
+def graficos_y_tabla4():
+    # Filtrar los datos para el período 2021-2023
+    df_filtered = df[(df["ANIO_REPORTE"] >= 2021) & (df["ANIO_REPORTE"] <= 2023)]
+    
+    # Agrupar y sumar el área deforestada por ANP
+    sum_area_deforestation = df_filtered.groupby("ANP")["AREA_DEFO"].sum().reset_index()
+    sum_area_deforestation.rename(columns={"AREA_DEFO": "Área Deforestada (ha)"}, inplace=True)
+    
+    # Crear el gráfico de dispersión
+    fig = px.scatter(
+        sum_area_deforestation, 
+        x="ANP", 
+        y="Área Deforestada (ha)", 
+        size="Área Deforestada (ha)", 
+        color="ANP", 
+        hover_name="ANP", 
+        title="Área Deforestada (ha) por ANP (2021-2023)",
+        labels={"ANP": "Área Natural Protegida", "Área Deforestada (ha)": "Área Deforestada (ha)"},
+        size_max=60,
+        color_discrete_sequence=px.colors.qualitative.Set3
+    )
+    
+    # Actualizar los ejes y diseño del gráfico
+    fig.update_yaxes(title_text="Área Deforestada (ha)")
+    fig.update_layout(
+        xaxis=dict(title='Área Natural Protegida', tickangle=-45),
+        yaxis=dict(title='Área Deforestada (ha) (2021-2023)'),
+        template="plotly_dark",
+        font=dict(family="Arial", size=12, color="white"),
+    )
+    
+    # Mostrar el gráfico y una descripción
+    st.plotly_chart(fig)
+    st.markdown("*Gráfica: El gráfico muestra la cantidad de área deforestada en hectáreas (ha) para cada Área Natural Protegida durante el período 2021-2023.*")
+    st.warning(
+        'El gráfico resalta que las áreas naturales protegidas con mayor deforestación deben ser objeto de políticas urgentes para mitigar la pérdida de biodiversidad y el impacto ambiental.',
+        icon="🌱"
+    )
