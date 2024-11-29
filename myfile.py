@@ -105,35 +105,44 @@ if menu == "Zonificación":
         'AREA_DEFO': 'Área Deforestada (ha)'
     }))
 
-# Sección: Área Deforestada por ANP
-if menu == "Área Deforestada por ANP":
-    st.header("Área Deforestada por Área Natural Protegida (ANP) - 2021-2023")
+# Sección: Área Deforestada por Categoría de ANP
+if menu == "Área Deforestada por Categoría de ANP":
+    st.header("Área Deforestada por Categoría de ANP (2021-2023)")
     
-    # Agrupar datos por ANP y sumar el área deforestada
-    sum_area_deforestation = data[(data["ANIO_REPORTE"] >= 2021) & (data["ANIO_REPORTE"] <= 2023)]\
-        .groupby("ANP")["AREA_DEFO"].sum().reset_index()
+    # Filtrar datos para el periodo 2021-2023
+    filtered_data = data[(data["ANIO_REPORTE"] >= 2021) & (data["ANIO_REPORTE"] <= 2023)]
     
-    # Crear gráfico de dispersión
-    fig = px.scatter(
-        sum_area_deforestation,
-        x="ANP",
-        y="AREA_DEFO",
-        size="AREA_DEFO",
-        color="ANP",
-        hover_name="ANP",
-        title="Área Deforestada (ha) por ANP (2021-2023)",
-        labels={"ANP": "Área Natural Protegida", "AREA_DEFO": "Área Deforestada (ha)"},
-        size_max=60,
-        color_discrete_sequence=px.colors.qualitative.Set3
-    )
+    # Agrupar datos por ANP y categoría, y sumar el área deforestada
+    sum_area_deforestation = filtered_data.groupby(["CATEGORIA", "ANP"])["AREA_DEFO"].sum().reset_index()
     
-    # Mostrar gráfico
-    st.plotly_chart(fig)
-    st.markdown("*Gráfica: El gráfico muestra la cantidad de área deforestada en hectáreas (ha) para cada Área Natural Protegida durante el período 2021-2023.*")
-    st.warning(
-        'El gráfico resalta que las áreas naturales protegidas con mayor deforestación deben ser objeto de políticas urgentes para mitigar la pérdida de biodiversidad y el impacto ambiental.',
-        icon="🌱"
-    )
+    # Obtener las categorías únicas
+    categorias = sum_area_deforestation["CATEGORIA"].unique()
+    
+    # Crear un gráfico para cada categoría
+    for categoria in categorias:
+        # Filtrar datos por categoría actual
+        categoria_data = sum_area_deforestation[sum_area_deforestation["CATEGORIA"] == categoria]
+        
+        # Crear gráfico de dispersión
+        fig = px.scatter(
+            categoria_data,
+            x="ANP",
+            y="AREA_DEFO",
+            size="AREA_DEFO",
+            color="ANP",
+            hover_name="ANP",
+            title=f"Área Deforestada (ha) en {categoria} (2021-2023)",
+            labels={"ANP": "Área Natural Protegida", "AREA_DEFO": "Área Deforestada (ha)"},
+            size_max=60,
+            color_discrete_sequence=px.colors.qualitative.Set3
+        )
+        
+        # Mostrar gráfico en Streamlit
+        st.subheader(f"Categoría: {categoria}")
+        st.plotly_chart(fig)
+    
+    st.markdown("*Nota: Cada gráfico muestra las ANPs pertenecientes a una categoría específica y su respectiva área deforestada durante el período 2021-2023.*")
+
 
 # Sección: Data (al final)
 if menu == "Data":
