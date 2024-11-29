@@ -73,17 +73,33 @@ if menu == "Gráficos":
 if menu == "Causas de Deforestación":
     st.header("Causas de la Deforestación")
     
-    # Contar las causas de deforestación
-    causas_deforestacion = data['CAUSA_DEFO'].value_counts().reset_index()
-    causas_deforestacion.columns = ['Causa', 'Cantidad']
+    # Gráfico de pastel para causa de deforestación
+    st.write("Causa de la deforestación")
     
-    # Crear gráfico de pizza
-    fig, ax = plt.subplots(figsize=(8, 8))
-    ax.pie(causas_deforestacion['Cantidad'], labels=causas_deforestacion['Causa'], autopct='%1.1f%%', startangle=90, colors=plt.cm.Paired.colors)
-    ax.set_title('Distribución de las Causas de la Deforestación')
-    st.pyplot(fig)
+    # Agrupación de datos por causa
+    area_causa = data.groupby('DEFO_CAUSA')['AREA_DEFO'].sum().reset_index()
+    area_causa = area_causa.sort_values('AREA_DEFO', ascending=False)  # Ordenar por área
     
-    st.write(causas_deforestacion)
+    # Colores uniformes que combinen con gráficos anteriores
+    colores = ['#FFA07A', '#90EE90', '#87CEEB', '#4682B4']  # Tonos similares al resto
+    
+    # Crear gráfico
+    fig3, ax3 = plt.subplots()
+    
+    # Gráfico de pastel 
+    ax3.pie(area_causa['AREA_DEFO'], labels=None, autopct='%1.1f%%', startangle=90, colors=colores, wedgeprops={'edgecolor': 'black'})
+    ax3.axis('equal')  # Asegurar que sea un círculo perfecto
+    
+    # Leyenda 
+    ax3.legend(area_causa['DEFO_CAUSA'], title="Causas de la deforestación", bbox_to_anchor=(1.05, 1), loc='upper left')
+    
+    # Mostrar el gráfico en Streamlit
+    st.pyplot(fig3)
+    
+    # Tabla de datos
+    st.write("Datos de causa de deforestación y área deforestada:")
+    st.dataframe(area_causa)
+
 
 # Sección: Comparativo
 if menu == "Comparativo":
