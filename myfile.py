@@ -24,8 +24,8 @@ data = pd.read_csv(archivo)
 with st.sidebar:
     menu = option_menu(
         menu_title="Menú Principal",
-        options=["Inicio", "Gráficos", "Data", "Comparativo", "Zonificación"],
-        icons=["house", "bar-chart", "table", "line-chart", "map"],
+        options=["Inicio", "Gráficos", "Comparativo", "Zonificación", "Área Deforestada por ANP", "Data"],
+        icons=["house", "bar-chart", "line-chart", "map", "globe", "table"],
         menu_icon="menu-app",
         default_index=0
     )
@@ -69,7 +69,6 @@ if menu == "Gráficos":
     color = {'2021': 'orange', '2022': 'green', '2023': 'blue'}[str(seleccion_anio)]
     graficos_y_tabla(data_anio, datos_filtrados, seleccion_anio, color)
 
-
 # Sección: Comparativo
 if menu == "Comparativo":
     st.header("Comparación entre Años")
@@ -106,7 +105,6 @@ if menu == "Zonificación":
         'AREA_DEFO': 'Área Deforestada (ha)'
     }))
 
-
 # Sección: Área Deforestada por ANP
 if menu == "Área Deforestada por ANP":
     st.header("Área Deforestada por Área Natural Protegida (ANP) - 2021-2023")
@@ -129,16 +127,15 @@ if menu == "Área Deforestada por ANP":
         color_discrete_sequence=px.colors.qualitative.Set3
     )
     
-# Mostrar gráfico
-st.plotly_chart(fig)
-st.markdown("*Gráfica: El gráfico muestra la cantidad de área deforestada en hectáreas (ha) para cada Área Natural Protegida durante el período 2021-2023.*")
-st.warning(
-    'El gráfico resalta que las áreas naturales protegidas con mayor deforestación deben ser objeto de políticas urgentes para mitigar la pérdida de biodiversidad y el impacto ambiental.',
-    icon="🌱"
-)
+    # Mostrar gráfico
+    st.plotly_chart(fig)
+    st.markdown("*Gráfica: El gráfico muestra la cantidad de área deforestada en hectáreas (ha) para cada Área Natural Protegida durante el período 2021-2023.*")
+    st.warning(
+        'El gráfico resalta que las áreas naturales protegidas con mayor deforestación deben ser objeto de políticas urgentes para mitigar la pérdida de biodiversidad y el impacto ambiental.',
+        icon="🌱"
+    )
 
-
-# Sección: Data
+# Sección: Data (al final)
 if menu == "Data":
     st.header("Vista completa de los datos")
     st.write("Tabla con todos los datos del registro:")
