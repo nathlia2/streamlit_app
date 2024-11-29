@@ -153,7 +153,12 @@ st.dataframe(area_zonificacion_renombrada)
 
 def graficos_y_tabla4():
     # Filtrar los datos para el período 2021-2023
-    df_filtered = df[(df["ANIO_REPORTE"] >= 2021) & (df["ANIO_REPORTE"] <= 2023)]
+    df_filtered = data[(data["ANIO_REPORTE"] >= 2021) & (data["ANIO_REPORTE"] <= 2023)]
+    
+    # Asegurar que los datos están disponibles
+    if df_filtered.empty:
+        st.warning("No se encontraron datos para el período 2021-2023.")
+        return
     
     # Agrupar y sumar el área deforestada por ANP
     sum_area_deforestation = df_filtered.groupby("ANP")["AREA_DEFO"].sum().reset_index()
@@ -173,13 +178,12 @@ def graficos_y_tabla4():
         color_discrete_sequence=px.colors.qualitative.Set3
     )
     
-    # Actualizar los ejes y diseño del gráfico
+    # Actualizar diseño del gráfico
     fig5.update_yaxes(title_text="Área Deforestada (ha)")
     fig5.update_layout(
         xaxis=dict(title='Área Natural Protegida', tickangle=-45),
-        yaxis=dict(title='Área Deforestada (ha) (2021-2023)'),
-        template="plotly_dark",
-        font=dict(family="Arial", size=12, color="white"),
+        yaxis=dict(title='Área Deforestada (ha)'),
+        font=dict(family="Arial", size=12),
     )
     
     # Mostrar el gráfico y una descripción
@@ -189,4 +193,5 @@ def graficos_y_tabla4():
         'El gráfico resalta que las áreas naturales protegidas con mayor deforestación deben ser objeto de políticas urgentes para mitigar la pérdida de biodiversidad y el impacto ambiental.',
         icon="🌱"
     )
+
 
