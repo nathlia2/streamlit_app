@@ -69,11 +69,6 @@ if menu == "Gráficos":
     color = {'2021': 'orange', '2022': 'green', '2023': 'blue'}[str(seleccion_anio)]
     graficos_y_tabla(data_anio, datos_filtrados, seleccion_anio, color)
 
-# Sección: Data
-if menu == "Data":
-    st.header("Vista completa de los datos")
-    st.write("Tabla con todos los datos del registro:")
-    st.dataframe(data)
 
 # Sección: Comparativo
 if menu == "Comparativo":
@@ -90,6 +85,61 @@ if menu == "Comparativo":
     fig, ax = plt.subplots()
     ax.bar(promedios['Año'], promedios['Promedio Mensual (ha)'], color=['orange', 'green', 'blue'])
     ax.set_title('Promedio mensual de área deforestada (2021-2023)')
-   
+    ax.set_xlabel('Año')
+    ax.set_ylabel('Área Deforestada (ha)')
+    st.pyplot(fig)
+    st.write(promedios)
+
+# Sección: Zonificación
+if menu == "Zonificación":
+    st.header("Zonificación de Deforestación")
+    area_zonificacion = data.groupby("ZONIFI_ANP")['AREA_DEFO'].sum().reset_index()
+    area_zonificacion = area_zonificacion.sort_values('AREA_DEFO', ascending=True)
+    
+    fig, ax = plt.subplots()
+    ax.barh(area_zonificacion['ZONIFI_ANP'], area_zonificacion['AREA_DEFO'], color='teal')
+    ax.set_title('Área deforestada por zonificación')
+    ax.set_xlabel('Área Deforestada (ha)')
+    st.pyplot(fig)
+    st.dataframe(area_zonificacion.rename(columns={
+        'ZONIFI_ANP': 'Zonificación',
+        'AREA_DEFO': 'Área Deforestada (ha)'
+    }))
 
 
+# Sección: Área Deforestada por ANP
+if menu == "Área Deforestada por ANP":
+    st.header("Área Deforestada por Área Natural Protegida (ANP) - 2021-2023")
+    
+    # Agrupar datos por ANP y sumar el área deforestada
+    sum_area_deforestation = data[(data["ANIO_REPORTE"] >= 2021) & (data["ANIO_REPORTE"] <= 2023)]\
+        .groupby("ANP")["AREA_DEFO"].sum().reset_index()
+    
+    # Crear gráfico de dispersión
+    fig = px.scatter(
+        sum_area_deforestation,
+        x="ANP",
+        y="AREA_DEFO",
+        size="AREA_DEFO",
+        color="ANP",
+        hover_name="ANP",
+        title="Área Deforestada (ha) por ANP (2021-2023)",
+        labels={"ANP": "Área Natural Protegida", "AREA_DEFO": "Área Deforestada (ha)"},
+        size_max=60,
+        color_discrete_sequence=px.colors.qualitative.Set3
+    )
+    
+    # Mostrar gráfico
+    st.plotly_chart(fig)
+    st.markdown("*Gráfica: El gráfico muestra la cantidad de área deforestada en hectáreas (ha) para cada Área Natural Protegida durante el período 2021-2023.*")
+    st.warning(
+        'El gráfico resalta que las áreas naturales protegidas con mayor deforestación deben ser objeto de políticas urgentes para mitigar la pérdida de biodiversidad y el impacto ambiental.',
+        icon="🌱"
+    )
+
+
+# Sección: Data
+if menu == "Data":
+    st.header("Vista completa de los datos")
+    st.write("Tabla con todos los datos del registro:")
+    st.dataframe(data)
