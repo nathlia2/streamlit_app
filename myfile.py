@@ -11,6 +11,8 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+import plotly.express as px
+
 
 # Configuración de la página de Streamlit
 st.set_page_config(page_title="Deforestación en Áreas Naturales Protegidas", page_icon="🌳", initial_sidebar_state="expanded", layout='wide')
