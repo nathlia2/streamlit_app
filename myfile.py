@@ -24,8 +24,8 @@ data = pd.read_csv(archivo)
 with st.sidebar:
     menu = option_menu(
         menu_title="Menú Principal",
-        options=["Inicio", "Gráficos", "Comparativo", "Zonificación", "Área Deforestada por ANP", "Data"],
-        icons=["house", "bar-chart", "line-chart", "map", "globe", "table"],
+        options=["Inicio", "Gráficos", "Causas de Deforestación", "Comparativo", "Zonificación", "Área Deforestada por ANP", "Data"],
+        icons=["house", "bar-chart", "chart-pie", "line-chart", "map", "globe", "table"],
         menu_icon="menu-app",
         default_index=0
     )
@@ -69,6 +69,22 @@ if menu == "Gráficos":
     color = {'2021': 'orange', '2022': 'green', '2023': 'blue'}[str(seleccion_anio)]
     graficos_y_tabla(data_anio, datos_filtrados, seleccion_anio, color)
 
+# Sección: Causas de Deforestación (Gráfico de Pizza)
+if menu == "Causas de Deforestación":
+    st.header("Causas de la Deforestación")
+    
+    # Contar las causas de deforestación
+    causas_deforestacion = data['CAUSA_DEFO'].value_counts().reset_index()
+    causas_deforestacion.columns = ['Causa', 'Cantidad']
+    
+    # Crear gráfico de pizza
+    fig, ax = plt.subplots(figsize=(8, 8))
+    ax.pie(causas_deforestacion['Cantidad'], labels=causas_deforestacion['Causa'], autopct='%1.1f%%', startangle=90, colors=plt.cm.Paired.colors)
+    ax.set_title('Distribución de las Causas de la Deforestación')
+    st.pyplot(fig)
+    
+    st.write(causas_deforestacion)
+
 # Sección: Comparativo
 if menu == "Comparativo":
     st.header("Comparación entre Años")
@@ -89,22 +105,6 @@ if menu == "Comparativo":
     st.pyplot(fig)
     st.write(promedios)
 
-# Sección: Causas de Deforestación (Gráfico de Pizza)
-if menu == "Causas de Deforestación":
-    st.header("Causas de la Deforestación")
-    
-    # Contar las causas de deforestación
-    causas_deforestacion = data['CAUSA_DEFO'].value_counts().reset_index()
-    causas_deforestacion.columns = ['Causa', 'Cantidad']
-    
-    # Crear gráfico de pizza
-    fig, ax = plt.subplots(figsize=(8, 8))
-    ax.pie(causas_deforestacion['Cantidad'], labels=causas_deforestacion['Causa'], autopct='%1.1f%%', startangle=90, colors=plt.cm.Paired.colors)
-    ax.set_title('Distribución de las Causas de la Deforestación')
-    st.pyplot(fig)
-    
-    st.write(causas_deforestacion)
-
 # Sección: Zonificación
 if menu == "Zonificación":
     st.header("Zonificación de Deforestación")
@@ -122,7 +122,7 @@ if menu == "Zonificación":
     }))
 
 # Sección: Área Deforestada por Categoría de ANP
-if menu == "Área Deforestada por Categoría de ANP":
+if menu == "Área Deforestada por ANP":
     st.header("Área Deforestada por Categoría de ANP (2021-2023)")
     
     # Filtrar datos para el periodo 2021-2023
