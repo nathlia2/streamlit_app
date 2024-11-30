@@ -34,15 +34,19 @@ with st.sidebar:
 if menu == "Inicio":
     st.title('Huellas de la deforestación')
     st.header("Rastreando el impacto de la pérdida forestal en Perú a través del tiempo")
-    st.write("La deforestación en Perú es un fenómeno alarmante...")
-    st.write("En este caso, analizaremos un registro de monitoreo...")
+    st.write('La deforestación en Perú es un fenómeno alarmante que ha capturado la atención de ambientalistas, científicos y gobiernos por igual. Este país, hogar de una de las partes más ricas en biodiversidad del planeta, enfrenta una creciente amenaza debido a la tala indiscriminada de bosques, impulsada por actividades como la minería y la expansión urbana. En este caso, analizaremos un registro de monitoreo de la Deforestación en el ámbito de las Áreas Naturales, para dar conocimiento especificos sobre ello y generar un análisis.')
+    st.write("El Registro de Monitoreo de la Deforestación en el ámbito de las Áreas Naturales Protegidas es una herramienta fundamental gestionada por el Servicio Nacional de Áreas Naturales Protegidas por el Estado (SERNANP) en Perú. Este organismo, adscrito al Ministerio del Ambiente, tiene como misión asegurar la conservación de las áreas protegidas del país, así como la diversidad biológica y el mantenimiento de sus servicios ambientales. A través de sistemas de información geográfica y técnicas de monitoreo biológico, SERNANP recopila y analiza datos sobre la deforestación y otros cambios en el uso del suelo dentro de estas áreas. Este registro no solo permite identificar las tendencias de pérdida de cobertura forestal, sino que también facilita la implementación de estrategias de conservación y gestión sostenible, contribuyendo así a la protección de los ecosistemas y a la mitigación de los efectos del cambio climático. La información obtenida es crucial para la toma de decisiones informadas y para el foralecimiento de las políticas ambientales en el país.")
+    st.write("De tal forma, nos enfocaremos en el monitoreo de la deforestación dentro de las Áreas Naturales Protegidas. Examinaremos datos generales que ilustran la tasa de deforestación y las tendencias a lo largo del tiempo, así como las implicancias de estas pérdidas en la conservación de la biodiversidad.")
 
-# Sección: Gráficos
-if menu == "Gráficos":
+
+def anio_deforestation():
     st.header("Gráficos de Deforestación")
-    seleccion_anio = st.selectbox("Selecciona el año para mostrar el gráfico", [2021, 2022, 2023])
     
-    # Función para procesar y filtrar datos
+    # Crear un filtro para seleccionar el año
+    years = [2021, 2022, 2023]
+    selected_year = st.selectbox("Selecciona el año para mostrar el gráfico:", years)
+    
+    # Función para procesar y filtrar datos por año
     def procesar_datos_por_anio(data, anio):
         meses = {1: 'Enero', 2: 'Febrero', 3: 'Marzo', 4: 'Abril', 5: 'Mayo', 6: 'Junio',
                  7: 'Julio', 8: 'Agosto', 9: 'Septiembre', 10: 'Octubre', 11: 'Noviembre', 12: 'Diciembre'}
@@ -50,24 +54,54 @@ if menu == "Gráficos":
         area_por_mes = datos_anio.groupby('MES_IMAG')['AREA_DEFO'].sum().reset_index()
         area_por_mes['MES_NOMBRE'] = area_por_mes['MES_IMAG'].map(meses)
         return area_por_mes, datos_anio
+
+    # Procesar datos
+    data_anio, datos_filtrados = procesar_datos_por_anio(data, selected_year)
+
+    # Colores para cada año
+    color_map = {2021: 'orange', 2022: 'green', 2023: 'blue'}
+    selected_color = color_map[selected_year]
+
+    # Crear gráfico con Plotly
+    fig = px.line(data_anio, x='MES_NOMBRE', y='AREA_DEFO', title=f'Área deforestada por mes en {selected_year}')
+    fig.update_traces(
+        mode='lines+markers',
+        marker=dict(symbol='circle', size=8, color=selected_color),
+        line=dict(color=selected_color, width=2)
+    )
+    fig.update_layout(
+        title=dict(
+            text=f'Área deforestada por mes en {selected_year}',
+            font=dict(size=20, color='darkblue')
+        ),
+        xaxis=dict(
+            title='Mes',
+            titlefont=dict(size=16, color='darkblue'),
+            tickfont=dict(size=14, color='black'),
+            showgrid=True,
+            gridcolor='lightgrey'
+        ),
+        yaxis=dict(
+            title='Área Deforestada (ha)',
+            titlefont=dict(size=16, color='darkblue'),
+            tickfont=dict(size=14, color='black'),
+            showgrid=True,
+            gridcolor='lightgrey'
+        ),
+        plot_bgcolor='white',
+        paper_bgcolor='white',
+        hovermode='x unified'
+    )
+
+    # Mostrar gráfico en Streamlit
+    st.plotly_chart(fig)
     
-    # Mostrar gráficos según selección de año
-    def graficos_y_tabla(data_anio, datos_filtrados, anio, color):
-        st.write(f"Gráfico del área deforestada por mes en {anio}:")
-        fig, ax = plt.subplots()
-        ax.plot(data_anio['MES_NOMBRE'], data_anio['AREA_DEFO'], marker='o', color=color)
-        ax.set_title(f'Área deforestada por mes en {anio}')
-        ax.set_xlabel('Mes')
-        ax.set_ylabel('Área Deforestada (ha)')
-        ax.grid(True)
-        plt.xticks(rotation=45)
-        st.pyplot(fig)
-        st.write(f"Datos filtrados para el año {anio}:")
-        st.dataframe(datos_filtrados[['MES_IMAG', 'ANIO_REPORTE', 'AREA_DEFO']])
-    
-    data_anio, datos_filtrados = procesar_datos_por_anio(data, seleccion_anio)
-    color = {'2021': 'orange', '2022': 'green', '2023': 'blue'}[str(seleccion_anio)]
-    graficos_y_tabla(data_anio, datos_filtrados, seleccion_anio, color)
+    # Mostrar tabla de datos filtrados
+    datos_filtrados.index = datos_filtrados.index + 1
+    st.write(datos_filtrados[['MES_IMAG', 'ANIO_REPORTE', 'AREA_DEFO']])
+    st.markdown("*La tabla muestra los datos de deforestación mensuales para el año seleccionado.*")
+    st.info("Este gráfico ilustra la cantidad de área deforestada (en hectáreas) por mes en el año seleccionado.")
+
 
 # Sección: Causas de Deforestación (Gráfico de Pizza)
 if menu == "Causas de Deforestación":
