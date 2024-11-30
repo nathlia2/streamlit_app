@@ -116,7 +116,7 @@ if menu == "Causas de Deforestación":
 
     # Paleta de colores personalizada (tonos verdes)
     custom_colors = [
-        "#A8D5BA", "#81C784", "#66BB6A", "#4CAF50", 
+        "#81C784", "#66BB6A", "#4CAF50", 
         "#388E3C", "#2E7D32", "#1B5E20"
     ]
 
@@ -125,7 +125,7 @@ if menu == "Causas de Deforestación":
         area_causa,
         values='AREA_DEFO',
         names='DEFO_CAUSA',
-        title='Distribución de las Causas de la Deforestación',
+        title=' ',
         color_discrete_sequence=custom_colors,
         hole=0.3  # Gráfico de dona
     )
@@ -139,10 +139,6 @@ if menu == "Causas de Deforestación":
 
     # Configuración del diseño
     fig.update_layout(
-        title=dict(
-            text='Distribución de las Causas de la Deforestación',
-            font=dict(size=20, color='darkblue')
-        ),
         legend=dict(
             title='Causas',
             font=dict(size=14),
