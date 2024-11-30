@@ -116,12 +116,11 @@ if menu == "Causas de Deforestación":
 
     # Paleta de colores
     custom_colors = [
-    "#FF6F61",  # Rojo coral
-    "#6BAED6",  # Azul claro
-    "#FDD835",  # Amarillo dorado
-    "#A1D490",  # Verde suave
-    "#FFB74D",  # Naranja claro
-    "#9575CD"   # Morado
+     "#6BAED6",  # Azul claro
+     "#FDD835",  # Amarillo dorado
+     "#A1D490",  # Verde suave
+     "#FFB74D",  # Naranja claro
+     "#9575CD"   # Morado
     ]
 
     # Crear gráfico de pastel interactivo con Plotly
