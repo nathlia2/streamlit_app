@@ -24,7 +24,7 @@ data = pd.read_csv(archivo)
 with st.sidebar:
     menu = option_menu(
         menu_title="Menú Principal",
-        options=["Inicio", "Deforestación por año", "Causas de Deforestación", "Comparativo", "Zonificación", "Área Deforestada por ANP", "Data"],
+        options=["Inicio", "Deforestación por año", "Causas de Deforestación", "Comparativo", "Zonificación", "Área Deforestada por ANP", "Conoce más", "Data"],
         icons=["house", "bar-chart", "chart-pie", "line-chart", "map", "globe", "table"],
         menu_icon="menu-app",
         default_index=0
@@ -119,7 +119,7 @@ if menu == "Causas de Deforestación":
      "#6BAED6",  # Azul claro
      "#FDD835",  # Amarillo dorado
      "#A1D490",  # Verde suave
-     "#FFB74D",  # Naranja claro
+     "#FF6F61",  # Rojo coral
      "#9575CD"   # Morado
     ]
 
@@ -252,8 +252,16 @@ if menu == "Área Deforestada por ANP":
         st.markdown(f"*Mostrando datos para la categoría: {categoria_seleccionada}.*")
 
 
+# Sección: Conoce más
+if menu == "Conoce más":
+    st.header("¿Cómo ayudo a frenar la deforestación?")
+    st.write("¡Conoce a SOSelva!")
+    
+
+
 # Sección: Data (al final)
 if menu == "Data":
     st.header("Vista completa de los datos")
     st.write("Tabla con todos los datos del registro:")
     st.dataframe(data)
+
