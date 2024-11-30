@@ -114,10 +114,14 @@ if menu == "Causas de Deforestación":
     area_causa = area_causa.sort_values('AREA_DEFO', ascending=False)  # Ordenar por área
 
 
-    # Paleta de colores personalizada (tonos verdes)
+    # Paleta de colores
     custom_colors = [
-        "#81C784", "#66BB6A", "#4CAF50", 
-        "#388E3C", "#2E7D32", "#1B5E20"
+    "#FF6F61",  # Rojo coral
+    "#6BAED6",  # Azul claro
+    "#FDD835",  # Amarillo dorado
+    "#A1D490",  # Verde suave
+    "#FFB74D",  # Naranja claro
+    "#9575CD"   # Morado
     ]
 
     # Crear gráfico de pastel interactivo con Plotly
