@@ -41,29 +41,40 @@ if menu == "Inicio":
 
 # Sección: Deforestación por año
 if menu == "Deforestación por año":
-    def anio_deforestation():
-        st.header("Área deforestada por año")
+    st.header("Área deforestada por año")
+
+    # Crear un filtro para seleccionar el año
+    years = data['ANIO_REPORTE'].unique()
+    selected_year = st.selectbox("Selecciona el año para mostrar el gráfico:", years)
+
+    # Función para procesar y filtrar datos por año
+    def procesar_datos_por_anio(data, anio):
+        meses = {1: 'Enero', 2: 'Febrero', 3: 'Marzo', 4: 'Abril', 5: 'Mayo', 6: 'Junio',
+                 7: 'Julio', 8: 'Agosto', 9: 'Septiembre', 10: 'Octubre', 11: 'Noviembre', 12: 'Diciembre'}
         
-        # Crear un filtro para seleccionar el año
-        years = [2021, 2022, 2023]
-        selected_year = st.selectbox("Selecciona el año para mostrar el gráfico:", years)
+        # Filtrar datos por año
+        datos_anio = data[data['ANIO_REPORTE'] == anio]
         
-        # Función para procesar y filtrar datos por año
-        def procesar_datos_por_anio(data, anio):
-            meses = {1: 'Enero', 2: 'Febrero', 3: 'Marzo', 4: 'Abril', 5: 'Mayo', 6: 'Junio',
-                     7: 'Julio', 8: 'Agosto', 9: 'Septiembre', 10: 'Octubre', 11: 'Noviembre', 12: 'Diciembre'}
-            datos_anio = data[data['ANIO_REPORTE'] == anio]
-            area_por_mes = datos_anio.groupby('MES_IMAG')['AREA_DEFO'].sum().reset_index()
-            area_por_mes['MES_NOMBRE'] = area_por_mes['MES_IMAG'].map(meses)
-            return area_por_mes, datos_anio
-    
-        # Procesar datos
-        data_anio, datos_filtrados = procesar_datos_por_anio(data, selected_year)
-    
+        # Verifica si hay datos después del filtrado
+        if datos_anio.empty:
+            st.warning(f"No hay datos para el año seleccionado: {anio}")
+            return pd.DataFrame(), pd.DataFrame()
+
+        # Agrupar área deforestada por mes
+        area_por_mes = datos_anio.groupby('MES_IMAG')['AREA_DEFO'].sum().reset_index()
+        area_por_mes['MES_NOMBRE'] = area_por_mes['MES_IMAG'].map(meses)  # Mapear nombres de los meses
+        
+        return area_por_mes, datos_anio
+
+    # Procesar datos para el año seleccionado
+    data_anio, datos_filtrados = procesar_datos_por_anio(data, selected_year)
+
+    # Verificar si hay datos antes de crear el gráfico
+    if not data_anio.empty:
         # Colores para cada año
         color_map = {2021: 'orange', 2022: 'green', 2023: 'blue'}
-        selected_color = color_map[selected_year]
-    
+        selected_color = color_map.get(selected_year, 'gray')
+
         # Crear gráfico con Plotly
         fig = px.line(data_anio, x='MES_NOMBRE', y='AREA_DEFO', title=f'Área deforestada por mes en {selected_year}')
         fig.update_traces(
@@ -94,16 +105,18 @@ if menu == "Deforestación por año":
             paper_bgcolor='white',
             hovermode='x unified'
         )
-    
+
         # Mostrar gráfico en Streamlit
         st.plotly_chart(fig)
-        
+
         # Mostrar tabla de datos filtrados
         datos_filtrados.index = datos_filtrados.index + 1
         st.write(datos_filtrados[['MES_IMAG', 'ANIO_REPORTE', 'AREA_DEFO']])
         st.markdown("*La tabla muestra los datos de deforestación mensuales para el año seleccionado.*")
         st.info("Este gráfico ilustra la cantidad de área deforestada (en hectáreas) por mes en el año seleccionado.")
-
+    else:
+        st.warning("No hay datos suficientes para generar el gráfico.")
+     
 
 # Sección: Causas de Deforestación (Gráfico Interactivo)
 if menu == "Causas de Deforestación":
