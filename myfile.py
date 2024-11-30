@@ -235,7 +235,7 @@ if menu == "Área Deforestada por ANP":
 
 
 # Sección: Data (al final)
-if menu == "Data":
+if menu == "Cómo puedes ayudar a frenar la deforestación":
     st.header("Vista completa de los datos")
     st.write("Tabla con todos los datos del registro:")
     st.dataframe(data)
