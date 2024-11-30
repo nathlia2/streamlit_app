@@ -24,7 +24,7 @@ data = pd.read_csv(archivo)
 with st.sidebar:
     menu = option_menu(
         menu_title="Menú Principal",
-        options=["Inicio", "Gráficos", "Causas de Deforestación", "Comparativo", "Zonificación", "Área Deforestada por ANP", "Data"],
+        options=["Inicio", "Deforestación por año", "Causas de Deforestación", "Comparativo", "Zonificación", "Área Deforestada por ANP", "Data"],
         icons=["house", "bar-chart", "chart-pie", "line-chart", "map", "globe", "table"],
         menu_icon="menu-app",
         default_index=0
@@ -38,10 +38,10 @@ if menu == "Inicio":
     st.write("El Registro de Monitoreo de la Deforestación en el ámbito de las Áreas Naturales Protegidas es una herramienta fundamental gestionada por el Servicio Nacional de Áreas Naturales Protegidas por el Estado (SERNANP) en Perú. Este organismo, adscrito al Ministerio del Ambiente, tiene como misión asegurar la conservación de las áreas protegidas del país, así como la diversidad biológica y el mantenimiento de sus servicios ambientales. A través de sistemas de información geográfica y técnicas de monitoreo biológico, SERNANP recopila y analiza datos sobre la deforestación y otros cambios en el uso del suelo dentro de estas áreas. Este registro no solo permite identificar las tendencias de pérdida de cobertura forestal, sino que también facilita la implementación de estrategias de conservación y gestión sostenible, contribuyendo así a la protección de los ecosistemas y a la mitigación de los efectos del cambio climático. La información obtenida es crucial para la toma de decisiones informadas y para el foralecimiento de las políticas ambientales en el país.")
     st.write("De tal forma, nos enfocaremos en el monitoreo de la deforestación dentro de las Áreas Naturales Protegidas. Examinaremos datos generales que ilustran la tasa de deforestación y las tendencias a lo largo del tiempo, así como las implicancias de estas pérdidas en la conservación de la biodiversidad.")
 
-# Sección: Causas de Deforestación (Gráfico de Pizza)
-if menu == "Gráficos":
+# Sección: Deforestación por año
+if menu == "Deforestación por año":
     def anio_deforestation():
-        st.header("Deforestación por año")
+        st.header("Área deforestada por año")
         
         # Crear un filtro para seleccionar el año
         years = [2021, 2022, 2023]
