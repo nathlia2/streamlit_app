@@ -25,7 +25,7 @@ with st.sidebar:
     menu = option_menu(
         menu_title="Menú Principal",
         options=["Inicio", "Deforestación por año", "Causas de Deforestación", "Comparativo", "Zonificación", "Área Deforestada por ANP", "Conoce más"],
-        icons=["house", "bar-chart", "chart-pie", "line-chart", "map", "globe", "table"],
+        icons=["house", "calendar-alt", "chart-pie", "bar-chart", "map", "globe", "info-circle"],
         menu_icon="menu-app",
         default_index=0
     )
