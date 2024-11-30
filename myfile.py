@@ -137,6 +137,22 @@ if menu == "Causas de Deforestación":
     st.dataframe(area_causa)
 
 
+    data = {
+        "Causas": ["Agricultura", "Minería", "Tala ilegal", "Infraestructura"],
+        "Área Deforestada": [500, 300, 150, 50]
+    }
+    
+    # Crear gráfico de pastel
+    fig = px.pie(
+        names=data["Causas"],
+        values=data["Área Deforestada"],
+        title="Causas de la Deforestación"
+    )
+    
+    # Mostrar gráfico
+    st.plotly_chart(fig)
+        
+
 # Sección: Comparativo
 if menu == "Comparativo":
     st.header("Comparación entre Años")
