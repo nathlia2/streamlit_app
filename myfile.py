@@ -105,52 +105,46 @@ if menu == "Deforestación por año":
         st.info("Este gráfico ilustra la cantidad de área deforestada (en hectáreas) por mes en el año seleccionado.")
 
 
-# Sección: Causas de Deforestación (Gráfico de Pizza)
+# Sección: Causas de Deforestación (Gráfico Interactivo)
 if menu == "Causas de Deforestación":
     st.header("Causas de la Deforestación")
-    
-    # Gráfico de pastel para causa de deforestación
-    st.write("Causa de la deforestación")
     
     # Agrupación de datos por causa
     area_causa = data.groupby('DEFO_CAUSA')['AREA_DEFO'].sum().reset_index()
     area_causa = area_causa.sort_values('AREA_DEFO', ascending=False)  # Ordenar por área
-    
-    # Colores uniformes que combinen con gráficos anteriores
-    colores = ['#FFA07A', '#90EE90', '#87CEEB', '#4682B4']  # Tonos similares al resto
-    
-    # Crear gráfico
-    fig3, ax3 = plt.subplots()
-    
-    # Gráfico de pastel 
-    ax3.pie(area_causa['AREA_DEFO'], labels=None, autopct='%1.1f%%', startangle=90, colors=colores, wedgeprops={'edgecolor': 'black'})
-    ax3.axis('equal')  # Asegurar que sea un círculo perfecto
-    
-    # Leyenda 
-    ax3.legend(area_causa['DEFO_CAUSA'], title="Causas de la deforestación", bbox_to_anchor=(1.05, 1), loc='upper left')
-    
-    # Mostrar el gráfico en Streamlit
-    st.pyplot(fig3)
-    
+
+    # Crear gráfico de pastel interactivo con Plotly
+    fig = px.pie(
+        area_causa,
+        values='AREA_DEFO',
+        names='DEFO_CAUSA',
+        title='Distribución de las Causas de la Deforestación',
+        color_discrete_sequence=px.colors.qualitative.Set3,
+        hole=0.4  # Gráfico de dona (opcional, puedes ajustarlo o eliminar esta línea)
+    )
+    fig.update_traces(textinfo='percent+label')  # Mostrar porcentaje y etiquetas
+
+    # Configuración del diseño
+    fig.update_layout(
+        title=dict(
+            text='Distribución de las Causas de la Deforestación',
+            font=dict(size=20, color='darkblue')
+        ),
+        legend=dict(
+            title='Causas',
+            font=dict(size=14),
+            bordercolor='lightgrey',
+            borderwidth=1
+        )
+    )
+
+    # Mostrar el gráfico interactivo en Streamlit
+    st.plotly_chart(fig)
+
     # Tabla de datos
     st.write("Datos de causa de deforestación y área deforestada:")
     st.dataframe(area_causa)
 
-
-    data = {
-        "Causas": ["Agricultura", "Minería", "Tala ilegal", "Infraestructura"],
-        "Área Deforestada": [500, 300, 150, 50]
-    }
-    
-    # Crear gráfico de pastel
-    fig = px.pie(
-        names=data["Causas"],
-        values=data["Área Deforestada"],
-        title="Causas de la Deforestación"
-    )
-    
-    # Mostrar gráfico
-    st.plotly_chart(fig)
         
 
 # Sección: Comparativo
