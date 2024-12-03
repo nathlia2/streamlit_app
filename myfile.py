@@ -42,6 +42,27 @@ if menu == "Inicio":
 # Sección: Deforestación por año
 if menu == "Deforestación por año":
     st.header("Área deforestada por año")
+    st.markdown(
+    """
+    <style>
+    .info-cuadro {
+        border: 2px solid #4CAF50; /* Borde verde */
+        border-radius: 10px; /* Bordes redondeados */
+        padding: 20px;
+        background-color: #f9f9f9; /* Fondo claro */
+        font-family: Arial, sans-serif;
+        font-size: 16px;
+        color: #333; /* Texto oscuro */
+        text-align: justify; /* Justificación del texto */
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Sombra ligera */
+    }
+    </style>
+    <div class="info-cuadro">
+        El gráfico a continuación nos permite analizar la pérdida de áreas forestales en las ANP durante los años. 
+        De este modo, entenderemos la magnitud del problema que vive el Perú y apreciaremos los periodos de mayor cambio.
+    </div>
+    """,
+    unsafe_allow_html=True
 
     # Crear un filtro para seleccionar el año
     years = data['ANIO_REPORTE'].unique()
@@ -121,7 +142,7 @@ if menu == "Deforestación por año":
 # Sección: Causas de Deforestación (Gráfico Interactivo)
 if menu == "Causas de Deforestación":
     st.header("Causas de la Deforestación")
-    
+   
     # Agrupación de datos por causa
     area_causa = data.groupby('DEFO_CAUSA')['AREA_DEFO'].sum().reset_index()
     area_causa = area_causa.sort_values('AREA_DEFO', ascending=False)  # Ordenar por área
